@@ -1,0 +1,63 @@
+<div class="row">
+  <!-- ADD A CAKES -->
+  <div class="col">
+    <h1>Add a Cake</h1>
+    <form #cakeForm='ngForm' (submit)="onSubmit()">
+      <div class="form-group"><input type="text" class='form-control' name='cakeName' placeholder='Cake Name' [(ngModel)]='cake.cakeName'></div>
+      <div class='form-group'><input type="text" class='form-control' name="bakerName" placeholder="Baker Name" [(ngModel)]='cake.bakerName'/></div>
+      <div class='form-group'><input type="text" class='form-control' name="url" placeholder="Picture Url" [(ngModel)]='cake.url'/></div>
+      <p><button class="btn btn-secondary" type="submit">Submit Cake</button></p>
+    </form>
+
+  </div>
+  <!-- ALL CAKES -->
+  <div class="col text-center">
+    <h1 class="text-center mb-3">Rate the Cakes</h1>
+    <ul class="list-group border" *ngFor="let cake of cakes" (click)="oneCake(cake)">
+      <li class="list-group-item border-0"><h4>{{cake.cakeName}}</h4></li>
+      <li class="list-group-item border-0"><img src='{{cake.url}}' class="rounded mx-auto d-block" alt='cake'></li>
+    </ul>
+  </div>
+
+  <!-- ONE CAKE -->
+  <div *ngIf="show" class="col">
+    <h2>{{selectedCake.cakeName}}</h2>
+    <ul class="list-group border">
+      <li class="list-group-item border-0">Baker: {{selectedCake.bakerName}}</li>
+      <li class="list-group-item border-0"><img src='{{selectedCake.url}}' class="rounded mx-auto d-block" alt='cake'></li>
+    </ul>
+    <ul class="list-group border">
+      <li class="list-group-item border-0">Average Rating: {{avgRating}}</li>
+      <li class="list-group-item border-0" *ngFor="let review of selectedCake.reviews"><em>{{review.comment}}</em></li>
+    </ul>
+
+    <button class="btn btn-secondary" *ngIf="!hideButtons" (click)="showRatingForm()">Rate this Cake!</button>
+    <button  class="btn btn-info" *ngIf="!hideButtons" (click)="showUpdateForm()">Update</button>
+    <button class="btn btn-danger" *ngIf="!hideButtons" (click)="delete()">Delete Cake</button>
+
+    <form *ngIf="showRate" (submit)="rate()">
+      <label></label>Rating
+      <select class='form-control' name="rating" [(ngModel)]='review.rating'>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+      <div class="form-group">
+        <label>Review</label>
+        <textarea class="form-control" name="comment"  rows="3" [(ngModel)]='review.comment'></textarea>
+      </div>
+      <button type="submit" class="btn btn-secondary">Rate!</button>
+    </form>
+    <form *ngIf="showUpdate" (submit)="update()">
+      <div class="form-group">
+        <input type="text" class="form-control" name='cakeName' [(ngModel)]='updateCake.cakeName' placeholder="{{selectedCake.cakeName}}">
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" name= 'cakeUrl' [(ngModel)]='updateCake.url' placeholder="{{selectedCake.url}}">
+      </div>
+      <button type="submit" class="btn btn-info">Update</button>
+    </form>
+  </div>
+</div>
